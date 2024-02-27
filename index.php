@@ -57,7 +57,7 @@
     <div class="container">
         <h3>Excel Reader</h3>
 
-        <form role="form" id="upload-excel-form" method="post" enctype="multipart/form-data">
+        <form role="form" id="upload-excel-form" method="post" enctype="multipart/form-data" style="margin-bottom: 20px;">
             <div class="form-group">
                 <input type="file" name="file" accept=".xlsx" onchange="setUploadExcelFormNameField(this)">
                 <p class="file-error error"></p>
@@ -69,12 +69,6 @@
             <button type="submit" class="btn btn-default" onclick="uploadExcel()">Upload</button>
         </form>
 
-        <!-- <form id="data" method="post" enctype="multipart/form-data">
-            <input type="text" name="fileName" value="Temp" />
-            <input type="file" name="file" accept=".xlsx" />
-            <button>Submit</button>
-        </form> -->
-
         <?php
 
         use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -82,20 +76,16 @@
         use \PhpOffice\PhpSpreadsheet\IOFactory;
 
         if (!empty($_POST)) {
-            //require_once "PHPExcel/PHPExcel.php";
             require 'vendor/autoload.php';
-
-
-
-            print_r($_POST);
-            print_r($_FILES);
+            
+            // print_r($_POST);
+            // print_r($_FILES);
 
             //$file_ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
             //$file_temp_location = $_FILES["file"]["tmp_name"];
             //$file_upload_error_code = $_FILES["file"]["error"];
 
             $filePath = $_FILES["file"]["tmp_name"];
-            echo "<br>File path: $filePath<br>";
             /*$reader = IOFactory::createReaderForFile($filePath);
             $excelObj = $reader->load($filePath);*/
             $excelObj = IOFactory::load($filePath);
@@ -108,8 +98,8 @@
             $lastRow = $workSheet->getHighestDataRow();
             $lastColumn = $workSheet->getHighestDataColumn();
 
-            echo "<br>Row ends at: $lastRow<br>";
-            echo "<br>Column ends at: $lastColumn<br>";
+            //echo "<br>Row ends at: $lastRow<br>";
+            //echo "<br>Column ends at: $lastColumn<br>";
 
             echo '<table class="table table-striped table-hover">';
             for ($row = 1; $row <= $lastRow; $row++) {
