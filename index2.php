@@ -17,38 +17,6 @@
                 $("#upload-excel-form input[name='name']").val(fileName);
             }
         }
-
-        function uploadExcel() {
-            var formId = "upload-excel-form";
-            $(`#${formId} .error`).html("");
-
-            $.ajax({
-                type: "POST",
-                data: new FormData($(`#${formId}`)[0]),
-                url: "actions/uploadExcelFileToDb.php",
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: "json",
-                success: function(response) {
-                    if (response.type == "success") {
-                        alert("File successfuly uploaded!");
-                    } else if (response.type == "error") {
-                        alert(response.message);
-                    } else if (response.type == "validation_error") {
-                        $(`#${formId} .file-error`).html(response.errors.file_error);
-                    } else {
-                        alert("An unknown error occured.");
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert("An error occured: " + xhr.status + " " + xhr.statusText);
-                },
-                complete: function() {
-
-                }
-            });
-        }
     </script>
 </head>
 
@@ -89,17 +57,63 @@
     <div class="container">
         <h3>Excel Reader</h3>
 
-        <form role="form" id="upload-excel-form" style="margin-bottom: 20px;">
+        <form role="form" id="upload-excel-form" method="post" enctype="multipart/form-data" style="margin-bottom: 20px;">
             <div class="form-group">
                 <input type="file" name="file" accept=".xlsx" onchange="setUploadExcelFormNameField(this)">
                 <p class="file-error error"></p>
             </div>
-            <!-- <div class="form-group">
+            <div class="form-group">
                 <input type="text" class="form-control" name="name" placeholder="Name">
                 <p class="name-error error"></p>
-            </div> -->
-            <button type="button" class="btn btn-default" onclick="uploadExcel()">Upload</button>
+            </div>
+            <button type="submit" class="btn btn-default" onclick="uploadExcel()">Upload</button>
         </form>
+
+        <?php
+
+        use PhpOffice\PhpSpreadsheet\Spreadsheet;
+        use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+        use PhpOffice\PhpSpreadsheet\IOFactory;
+
+        if (!empty($_POST)) {
+            require 'vendor/autoload.php';
+            
+            // print_r($_POST);
+            print_r($_FILES);
+
+            //$file_ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
+            //$file_temp_location = $_FILES["file"]["tmp_name"];
+            //$file_upload_error_code = $_FILES["file"]["error"];
+
+            $filePath = $_FILES["file"]["tmp_name"];
+            /*$reader = IOFactory::createReaderForFile($filePath);
+            $excelObj = $reader->load($filePath);*/
+            $excelObj = IOFactory::load($filePath);
+
+            //$workSheet = $excelObj->getActiveSheet();
+            $workSheet = $excelObj->getSheet('0'); // get first sheet
+
+            //echo "<br>A1: {$workSheet->getCell("A1")->getValue()}<br>";
+
+            $lastRow = $workSheet->getHighestDataRow();
+            $lastColumn = $workSheet->getHighestDataColumn();
+
+            //echo "<br>Row ends at: $lastRow<br>";
+            //echo "<br>Column ends at: $lastColumn<br>";
+
+            echo '<table class="table table-striped table-hover">';
+            for ($row = 1; $row <= $lastRow; $row++) {
+                echo "<tr>";
+                foreach (range("A", $lastColumn) as $column) {
+                    echo "<td>";
+                    echo $workSheet->getCell($column . $row)->getValue();
+                    echo "</td>";
+                }
+                echo "</tr>";
+            }
+            echo '</table>';
+        }
+        ?>
     </div>
 
 </body>
