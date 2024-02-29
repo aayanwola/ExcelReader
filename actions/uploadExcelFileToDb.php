@@ -90,7 +90,7 @@ response("success", $excelFileId);
 
 
 // FUNCTIONS
-function deleteExcelFileFromDb($excelFileId, $dbConnection) // Test function after creating first file in db: deleteExcelFileFromDb(1, $dbConnection);
+function deleteExcelFileFromDb($excelFileId, $dbConnection)
 {
     $sql = "DELETE FROM excel_files WHERE id=$excelFileId";
     $result = mysqli_query($dbConnection, $sql);
