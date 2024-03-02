@@ -25,11 +25,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">WebSiteName</a>
+                <a class="navbar-brand" href="index.php">WebSiteName</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.php">Home</a></li>
+                    <li><a href="index.php">Home</a></li>
                     <li><a href="excel_files.php">Excel Files</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

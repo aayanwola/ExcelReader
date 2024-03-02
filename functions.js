@@ -1,6 +1,10 @@
 const loader = new Image(25, 25);
 loader.src = "images/loader.gif";
 
+$(document).ready(function() {
+	highlightCurrentPageInNavBar();
+});
+
 function setUploadExcelFormNameField(el) {
     var file = $(el)[0].files[0];
 
@@ -55,4 +59,9 @@ function showLoader(selection) {
 
 function hideLoader(selection) {
     $(selection).html("");
+}
+
+function highlightCurrentPageInNavBar() {
+    var page = location.pathname.split("/").pop();
+    $(`nav .navbar-nav a[href="${page}"]`).parents("li").addClass("active");
 }
